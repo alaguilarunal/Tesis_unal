@@ -1,0 +1,128 @@
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4: imputación con las TPM seleccionadas}
+		\footnotesize
+		\textbf{Pregunta:} ¿integrar las TPM seleccionadas por TE y CCM reduce la incertidumbre de la imputación del EPM?
+		\begin{itemize}
+			\setlength{\itemsep}{1pt}
+			\item \textbf{Tres modelos por sensor:} GP univariado (solo el pasado del EPM), MOGP con las TPM \textbf{mejores} y MOGP con las TPM \textbf{peores} (tabla de selección). Mismo modelo del cuaderno: GPy, ICM de rango 1, kernel RBF, un solo arranque.
+			\item \textbf{Brecha real:} se entrena con el EPM previo a la brecha. El EPM posterior (no usado) sirve de control.
+			\item \textbf{Brecha simulada:} dentro del tramo previo se ocultan 500 pasos de 6\,h (los mismos 4 sensores, el mismo hueco) y se comparan con lo oculto.
+			\item \textbf{Métricas:} $\sigma$ media (ancho de la incertidumbre), RMSE y cobertura del intervalo del 95\,\%.
+		\end{itemize}
+		\alertbox{\scriptsize \textbf{Cambio respecto a E1--E3:} el EPM se estandariza solo con los datos de entrenamiento. Antes se usaba la media de todo el registro, incluido el post-brecha, y eso filtraba el nivel posterior a la brecha hacia la media del prior. En la brecha real el TPM se toma una vez al día para que el MOGP quepa en memoria.}
+		\note{Comparo tres modelos para cada sensor. Si las series bien puntuadas aportan información, la banda de incertidumbre debería ser más angosta que la del modelo univariado, y la reconstrucción en la brecha simulada debería equivocarse menos que con las peores.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{GP univariado converge al prior: Sensor 1 (5m)}
+		\footnotesize
+		\begin{center}\includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{img/imp_prior_Sensor_1_5m.png}\end{center}
+		\vspace{-0.15cm}
+		Lejos de los datos, la media vuelve a la media del prior (3160.9) y la banda se abre hasta $\pm2\sigma$ del prior ($\sigma=1.00$ Digits) \cite{rasmussen2006}.
+		\note{En la brecha, el modelo que solo usa el pasado del EPM pierde la información en pocas semanas: la media se vuelve constante y la banda llega al ancho del prior. Los puntos negros, después de la brecha, no se usaron para entrenar.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{GP univariado converge al prior: Sensor 2 (10m)}
+		\footnotesize
+		\begin{center}\includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{img/imp_prior_Sensor_2_10m.png}\end{center}
+		\vspace{-0.15cm}
+		Lejos de los datos, la media vuelve a la media del prior (2791.6) y la banda se abre hasta $\pm2\sigma$ del prior ($\sigma=2.44$ Digits) \cite{rasmussen2006}.
+		\note{En la brecha, el modelo que solo usa el pasado del EPM pierde la información en pocas semanas: la media se vuelve constante y la banda llega al ancho del prior. Los puntos negros, después de la brecha, no se usaron para entrenar.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{GP univariado converge al prior: Sensor 3 (5m)}
+		\footnotesize
+		\begin{center}\includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{img/imp_prior_Sensor_3_5m.png}\end{center}
+		\vspace{-0.15cm}
+		Lejos de los datos, la media vuelve a la media del prior (3173.7) y la banda se abre hasta $\pm2\sigma$ del prior ($\sigma=0.86$ Digits) \cite{rasmussen2006}.
+		\note{En la brecha, el modelo que solo usa el pasado del EPM pierde la información en pocas semanas: la media se vuelve constante y la banda llega al ancho del prior. Los puntos negros, después de la brecha, no se usaron para entrenar.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{GP univariado converge al prior: Sensor 4 (10m)}
+		\footnotesize
+		\begin{center}\includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{img/imp_prior_Sensor_4_10m.png}\end{center}
+		\vspace{-0.15cm}
+		Lejos de los datos, la media vuelve a la media del prior (3005.2) y la banda se abre hasta $\pm2\sigma$ del prior ($\sigma=0.39$ Digits) \cite{rasmussen2006}.
+		\note{En la brecha, el modelo que solo usa el pasado del EPM pierde la información en pocas semanas: la media se vuelve constante y la banda llega al ancho del prior. Los puntos negros, después de la brecha, no se usaron para entrenar.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha real: Sensor 1 (5m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_real_Sensor_1_5m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize $\sigma$ media en la brecha: univariado 0.98, mejores 0.95, peores 0.93 Digits.}
+		\note{Cada panel es un modelo. La banda en la brecha casi no cambia al agregar las TPM: el MOGP con kernel genérico no transfiere la información del TPM hacia la brecha. Ninguno llega al nivel posterior a la brecha.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha real: Sensor 2 (10m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_real_Sensor_2_10m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize $\sigma$ media en la brecha: univariado 2.43, mejores 2.63, peores 2.60 Digits.}
+		\note{Cada panel es un modelo. La banda en la brecha casi no cambia al agregar las TPM: el MOGP con kernel genérico no transfiere la información del TPM hacia la brecha. Ninguno llega al nivel posterior a la brecha.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha real: Sensor 3 (5m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_real_Sensor_3_5m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize $\sigma$ media en la brecha: univariado 0.86, mejores 1.02, peores 0.93 Digits.}
+		\note{Cada panel es un modelo. La banda en la brecha casi no cambia al agregar las TPM: el MOGP con kernel genérico no transfiere la información del TPM hacia la brecha. Ninguno llega al nivel posterior a la brecha.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha real: Sensor 4 (10m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_real_Sensor_4_10m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize $\sigma$ media en la brecha: univariado 0.39, mejores 0.78, peores 0.44 Digits.}
+		\note{Cada panel es un modelo. La banda en la brecha casi no cambia al agregar las TPM: el MOGP con kernel genérico no transfiere la información del TPM hacia la brecha. Ninguno llega al nivel posterior a la brecha.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha simulada: Sensor 1 (5m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_simulada_Sensor_1_5m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize Univariado: RMSE 0.93, cob. 95\,\%. Mejores: RMSE 1.48, cob. 76\,\%. Peores: RMSE 0.96, cob. 93\,\%.}
+		\note{Aquí sí conozco la verdad: los puntos negros estaban ocultos. Comparo cuánto se equivoca cada modelo y si los valores reales caen dentro de su banda.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha simulada: Sensor 2 (10m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_simulada_Sensor_2_10m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize Univariado: RMSE 2.61, cob. 97\,\%. Mejores: RMSE 2.52, cob. 94\,\%. Peores: RMSE 2.93, cob. 90\,\%.}
+		\note{Aquí sí conozco la verdad: los puntos negros estaban ocultos. Comparo cuánto se equivoca cada modelo y si los valores reales caen dentro de su banda.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha simulada: Sensor 3 (5m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_simulada_Sensor_3_5m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize Univariado: RMSE 0.71, cob. 98\,\%. Mejores: RMSE 0.71, cob. 97\,\%. Peores: RMSE 0.66, cob. 99\,\%.}
+		\note{Aquí sí conozco la verdad: los puntos negros estaban ocultos. Comparo cuánto se equivoca cada modelo y si los valores reales caen dentro de su banda.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4, brecha simulada: Sensor 4 (10m)}
+		\begin{center}\includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{img/imp_simulada_Sensor_4_10m.png}\end{center}
+		\vspace{-0.2cm}
+		{\scriptsize Univariado: RMSE 0.58, cob. 66\,\%. Mejores: RMSE 0.56, cob. 67\,\%. Peores: RMSE 0.60, cob. 66\,\%.}
+		\note{Aquí sí conozco la verdad: los puntos negros estaban ocultos. Comparo cuánto se equivoca cada modelo y si los valores reales caen dentro de su banda.}
+	\end{frame}
+	%% ---------------------------------------------------------------------------
+	\begin{frame}{E4: resumen}
+		\footnotesize
+		\begin{center}
+		\scriptsize
+		\begin{tabular}{lccc|ccc}
+			\hline
+			& \multicolumn{3}{c|}{\textbf{Brecha simulada: RMSE (Digits)}} & \multicolumn{3}{c}{\textbf{Brecha real: $\sigma$ media (Digits)}} \
+			\textbf{EPM} & univariado & mejores & peores & univariado & mejores & peores \
+			\hline
+			Sensor 1 (5m) & 0.93 & 1.48 & 0.96 & 0.98 & 0.95 & 0.93 \\
+			Sensor 2 (10m) & 2.61 & 2.52 & 2.93 & 2.43 & 2.63 & 2.60 \\
+			Sensor 3 (5m) & 0.71 & 0.71 & 0.66 & 0.86 & 1.02 & 0.93 \\
+			Sensor 4 (10m) & 0.58 & 0.56 & 0.60 & 0.39 & 0.78 & 0.44 \\
+			\hline
+		\end{tabular}
+		\end{center}
+		\begin{itemize}
+			\setlength{\itemsep}{1pt}
+			\item \textbf{Brecha real:} agregar las TPM no reduce la incertidumbre; la banda queda en el ancho del prior. En el Sensor 4 las mejores la ensanchan.
+			\item \textbf{Brecha simulada:} en los Sensores 2 y 4 el orden es el esperado (mejores $<$ univariado $<$ peores), con diferencias pequeñas. En el Sensor 3 las peores dan el menor error, y en el Sensor 1 las mejores empeoran (RMSE 1.48 y cobertura 76\,\%).
+			\item \textbf{Ningún modelo} alcanza el nivel del EPM después de la brecha (Sensor 1: unos 40 Digits por encima).
+		\end{itemize}
+		\alertbox{\scriptsize Con un kernel genérico (ICM, RBF), la selección por TE y CCM no se traduce en una imputación mejor. La TE y el CCM se calcularon sobre diferencias de 6\,h; el MOGP trabaja sobre niveles.}
+		\note{Este es el resultado honesto: con el kernel genérico, integrar las series bien puntuadas no reduce la incertidumbre en la brecha real ni mejora de forma consistente la brecha simulada. Es compatible con que una covarianza cruzada genérica no baste, pero no prueba que el kernel físico lo resuelva; eso queda por demostrar.}
+	\end{frame}
